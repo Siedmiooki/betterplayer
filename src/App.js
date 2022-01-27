@@ -1,24 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from "react-router-dom";
+import { createContext, useReducer } from "react";
+import { appReducer, initState } from "./reducers/appreducer"
+import GlobalStyles from "./styles/GlobalStyles";
+import axios from "axios";
+import LoginPage from "./pages/LoginPage";
+import TrialPage from "./pages/TrailPage";
+import HomePage from "./pages/HomePage";
+
+axios.defaults.baseURL = 'https://thebetter.bsgroup.eu';
+axios.defaults.withCredentials = true
+
+export const Appcontext = createContext();
 
 function App() {
+
+  const [state, dispatch] = useReducer(appReducer, initState)
+
   return (
+    <Appcontext.Provider value={{ state, dispatch }}>
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <GlobalStyles />
+        <Routes>
+          <Route exact path="/" element={<LoginPage />} />
+          <Route exact path="/trial" element={<TrialPage />} />
+          <Route exact path="/home" element={<HomePage />} />
+        </Routes>
     </div>
+    </Appcontext.Provider>
   );
 }
 
